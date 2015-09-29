@@ -1,0 +1,11 @@
+{
+	"require-dev": {
+		
+	},
+	"autoload": {
+		"psr-4": {
+			"Shopify\\": "src/",
+			"Shopify\\Exceptions": "src/Exceptions"
+		}
+	}
+}
