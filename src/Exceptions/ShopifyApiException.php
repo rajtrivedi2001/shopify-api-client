@@ -2,7 +2,7 @@
 
 namespace Shopify\Exceptions;
 
-class ShopifyApiException extends Exception
+class ShopifyApiException extends \Exception
 {
 	protected $method;
 	protected $path;
