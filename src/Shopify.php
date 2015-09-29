@@ -33,7 +33,7 @@ class Shopify
 		$response = json_decode($response);
 
 		if (isset($response->errors) || ($this->last_response_headers['http_status_code'] >= 400))
-			throw new ShopifyApiException($method, $path, $params, $this->last_response_headers, $response);
+			throw new ShopifyApiException($method, $endpoint, $params, $this->last_response_headers, $response);
 
 		return (is_array($response) and (count($response) > 0)) ? array_shift($response) : $response;
 	}
