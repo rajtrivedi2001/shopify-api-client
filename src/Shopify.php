@@ -47,17 +47,21 @@ class Shopify
 		$errno = curl_errno($ch);
 		$error = curl_error($ch);
 		curl_close($ch);
-		if ($errno) throw new ShopifyCurlException($error, $errno);
+
+		if ($errno) 
+			throw new ShopifyCurlException($error, $errno);
+
 		list($message_headers, $message_body) = preg_split("/\r\n\r\n|\n\n|\r\r/", $response, 2);
 		$this->last_response_headers = $this->curlParseHeaders($message_headers);
+
 		return $message_body;
 	}
 
 	private function curlAppendQuery($url, $query)
 	{
 		if (empty($query)) return $url;
-		if (is_array($query)) return "$url?".http_build_query($query);
-		else return "$url?$query";
+		if (is_array($query)) return "{$url}?" . http_build_query($query);
+		else return "{$url}?{$query}";
 	}
 
 	private function curlSetopts($ch, $method, $payload, $request_headers)
@@ -68,14 +72,12 @@ class Shopify
 		curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'ohShopify-php-api-client');
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt ($ch, CURLOPT_CUSTOMREQUEST, $method);
 		if (!empty($request_headers)) curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 		
-		if ($method != 'GET' && !empty($payload))
-		{
+		if ($method != 'GET' && !empty($payload)) {
 			if (is_array($payload)) $payload = http_build_query($payload);
 			curl_setopt ($ch, CURLOPT_POSTFIELDS, $payload);
 		}
